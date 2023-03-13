@@ -1,0 +1,3 @@
+open(): https://steam.oxxostudio.tw/category/python/basic/builtin-open.html
+read PDF: https://steam.oxxostudio.tw/category/python/example/pdfplumber.html
+CSV: https://steam.oxxostudio.tw/category/python/library/csv.html
