@@ -1,0 +1,5 @@
+open(): https://steam.oxxostudio.tw/category/python/basic/builtin-open.html
+read PDF: https://steam.oxxostudio.tw/category/python/example/pdfplumber.html
+CSV: https://steam.oxxostudio.tw/category/python/library/csv.html
+Tkinter GUI: https://steam.oxxostudio.tw/category/python/tkinter/index.html
+tk scrollbar: https://www.twblogs.net/a/5b7cef282b71770a43dd35b0
