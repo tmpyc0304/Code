@@ -36,85 +36,103 @@ tk.Label(main_frame, text="分科測驗成績分析").grid(row=0, column=0, stic
 # 輸入成績
 frame1 = tk.Frame(main_frame)
 
-tk.Label(frame1, text="輸入學測成績").grid(row=0, column=0, sticky=tk.W)
-for i in range(1, 6 + 1):
-    exec(f"score{i} = tk.IntVar()")
-    exec(f"frame1_{i} = tk.Frame(frame1)")
-    exec(f"tk.Label(frame1_{i}, text='{analysis.subject[i]}').pack(side='left')")
-    exec(f"tk.Entry(frame1_{i}, textvariable=score{i}, width=2).pack(side='left')")
-    exec(f"frame1_{i}.grid(row=0, column={i}, sticky=tk.W)")
+tk.Label(frame1, text="輸入學測級分").grid(row=0, column=0, sticky=tk.W)
+tk.Label(frame1, text="輸入分科級分").grid(row=1, column=0, sticky=tk.W)
 
-tk.Label(frame1, text="輸入分科成績").grid(row=1, column=0, sticky=tk.W)
-for i in range(7, 13 + 1):
-    exec(f"score{i} = tk.IntVar()")
+j = 0
+for i in range(1, 13 + 1):
+    exec(f"subject{i} = tk.IntVar()")
     exec(f"frame1_{i} = tk.Frame(frame1)")
-    exec(f"tk.Label(frame1_{i}, text='{analysis.subject[i]}').pack(side='left')")
-    exec(f"tk.Entry(frame1_{i}, textvariable=score{i}, width=2).pack(side='left')")
-    exec(f"frame1_{i}.grid(row=1, column={i - 6}, sticky=tk.W)")
+    exec(f"tk.Label(frame1_{i}, text='{analysis.subject_list[i]}').pack(side='left')")
+    exec(f"tk.Entry(frame1_{i}, textvariable=subject{i}, width=2).pack(side='left')")
+
+    if i == 7:
+        j = 1
+    exec(f"frame1_{i}.grid(row={j}, column={i % 7 + j}, sticky=tk.W)")
 
 frame1.grid(row=1, column=0, sticky=tk.W)
 
+
 # 確定成績
-score = []
-
-
 def input_score():
+    global score
+    score = []
+
     for i in range(1, 13 + 1):
-        score.append(eval(f"score{i}.get()"))
+        score.append(eval(f"subject{i}.get()"))
 
 
-frame2 = tk.Frame(main_frame)
-
-button1 = tk.Button(
-    frame2,
+tk.Button(
+    main_frame,
     text="確定",
     command=lambda: [
-        button1.destroy(),
         input_score(),
-        label1.pack(side="left"),
         analysis.create_dic(),
-        frame3.grid(row=3, column=0, sticky=tk.W),
-        frame4.grid(row=4, column=0, sticky=tk.W),
+        frame2.grid(row=3, column=0, sticky=tk.W),
+        frame3.grid(row=4, column=0, sticky=tk.W),
     ],
-)
-label1 = tk.Label(frame2, text="成績輸入完成")
+).grid(row=2, column=0, sticky=tk.W)
 
-button1.pack(side="left")
-
-frame2.grid(row=2, column=0, sticky=tk.W)
 
 # 依大學篩選
-frame3 = tk.LabelFrame(main_frame, text="依大學篩選")
+click1 = False
+click2 = False
 
-frame3_1 = tk.Frame(frame3)
-tk.Label(frame3_1, text="公立大學").grid(row=0, column=0, sticky=tk.W)
+
+def select_all1():
+    global click1
+
+    if click1 is False:
+        for i in range(1, 31 + 1):
+            exec(f"button{i}.select()")
+
+            click1 = True
+    else:
+        for i in range(1, 31 + 1):
+            exec(f"button{i}.deselect()")
+
+            click1 = False
+
+
+def select_all2():
+    global click2
+
+    if click2 is False:
+        for i in range(1, 31 + 1):
+            exec(f"button{i + 31}.select()")
+
+            click2 = True
+    else:
+        for i in range(1, 31 + 1):
+            exec(f"button{i + 31}.deselect()")
+
+            click2 = False
+
+
+frame2 = tk.LabelFrame(main_frame, text="依大學篩選")
+
+tk.Checkbutton(frame2, text="公立全選", command=select_all1).grid(
+    row=0, column=0, columnspan=5, sticky=tk.W
+)
+tk.Checkbutton(frame2, text="私立全選", command=select_all2).grid(
+    row=8, column=0, columnspan=5, sticky=tk.W
+)
+
 j, k = 1, 0
-for i in range(1, 31 + 1):
+for i in range(1, 62 + 1):
+    if i == 32:
+        j, k = 9, 0
+
     exec(f"college{i} = tk.StringVar()")
     exec(
-        f"tk.Checkbutton(frame3_1, text='{analysis.public_college[i]}', variable=college{i}, onvalue='{analysis.public_college[i]} ', offvalue='').grid(row={j}, column={k}, sticky=tk.W)"
+        f"button{i} = tk.Checkbutton(frame2, text='{analysis.college_list[i]}', variable=college{i}, onvalue='{analysis.college_list[i]} ', offvalue='')"
     )
+    exec(f"button{i}.grid(row={j}, column={k}, sticky=tk.W)")
 
     k += 1
 
     j += k // 5
     k %= 5
-frame3_1.grid(row=0, column=0, sticky=tk.W)
-
-frame3_2 = tk.Frame(frame3)
-tk.Label(frame3_2, text="私立大學").grid(row=0, column=0, sticky=tk.W)
-j, k = 1, 0
-for i in range(1, 31 + 1):
-    exec(f"college{i + 31} = tk.StringVar()")
-    exec(
-        f"tk.Checkbutton(frame3_2, text='{analysis.private_college[i]}', variable=college{i + 31}, onvalue='{analysis.private_college[i]} ', offvalue='').grid(row={j}, column={k}, sticky=tk.W)"
-    )
-
-    k += 1
-
-    j += k // 5
-    k %= 5
-frame3_2.grid(row=1, column=0, sticky=tk.W)
 
 
 # 開始分析
@@ -124,36 +142,53 @@ def create_list():
         select += eval(f"college{i}.get()")
 
     global admit
-    admit = analysis.calculate_weight(score, select)
+    admit = sorted(
+        analysis.calculate_weight(score, select),
+        key=lambda d: float(d["錄取分數"]),
+        reverse=True,
+    )
 
 
-frame4 = tk.Frame(main_frame)
+frame3 = tk.Frame(main_frame)
 
-button2 = tk.Button(
-    frame4,
+tk.Button(
+    frame3,
     text="開始分析",
     command=lambda: [
-        button2.destroy(),
         create_list(),
-        label2.pack(side="left"),
         show(),
-        frame5.grid(row=5, column=0, sticky=tk.W),
     ],
-)
-label2 = tk.Label(frame4, text="分析完成")
-
-button2.pack(side="left")
+).pack(side="left")
 
 
 # 顯示錄取校系
 def show():
+    global frame4
+
+    frame4.destroy()
+
+    frame4 = tk.Frame(main_frame)
+
+    tk.Label(frame4, text="系組代碼").grid(row=0, column=0, sticky=tk.W)
+    tk.Label(frame4, text="校名").grid(row=0, column=1, sticky=tk.W)
+    tk.Label(frame4, text="系組名").grid(row=0, column=2, sticky=tk.W)
+    tk.Label(frame4, text="錄取人數").grid(row=0, column=3, sticky=tk.W)
+    tk.Label(frame4, text="錄取分數").grid(row=0, column=4, sticky=tk.W)
+    tk.Label(frame4, text="加權分數").grid(row=0, column=5, sticky=tk.W)
+
     for i in range(len(admit)):
-        tk.Label(frame5, text=admit[i]["系組代碼"]).grid(row=i, column=0, sticky=tk.W)
-        tk.Label(frame5, text=admit[i]["校名"]).grid(row=i, column=1, sticky=tk.W)
-        tk.Label(frame5, text=admit[i]["系組名"]).grid(row=i, column=2, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["系組代碼"]).grid(row=(i + 1), column=0, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["校名"]).grid(row=(i + 1), column=1, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["系組名"]).grid(row=(i + 1), column=2, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["錄取人數"]).grid(row=(i + 1), column=3, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["錄取分數"]).grid(row=(i + 1), column=4, sticky=tk.W)
+        tk.Label(frame4, text=admit[i]["加權分數"]).grid(row=(i + 1), column=5, sticky=tk.W)
+
+    frame4.grid(row=5, column=0, sticky=tk.W)
 
 
-frame5 = tk.Frame(main_frame)
+frame4 = tk.Frame(main_frame)
+frame4.grid(row=5, column=0, sticky=tk.W)
 
 # 滑動設定
 main_frame.bind(

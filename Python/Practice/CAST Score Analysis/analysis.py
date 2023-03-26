@@ -1,8 +1,5 @@
-import os
 import csv
 from itertools import groupby
-
-os.chdir("D:/Code/Python/Practice/CAST Score Analysis")
 
 s_to_i1 = {  # subject_to_int1
     "國": 0,
@@ -93,7 +90,7 @@ def calculate_weight(score, select):
     return admit
 
 
-subject = [
+subject_list = [
     "",
     "國文",
     "英文",
@@ -109,7 +106,7 @@ subject = [
     "化學",
     "生物",
 ]
-public_college = [
+college_list = [
     "",
     "國立臺灣大學",
     "國立臺灣師範大學",
@@ -142,9 +139,6 @@ public_college = [
     "國立宜蘭大學",
     "國立聯合大學",
     "國立金門大學",
-]
-private_college = [
-    "",
     "東吳大學",
     "高雄醫學大學",
     "中原大學",
