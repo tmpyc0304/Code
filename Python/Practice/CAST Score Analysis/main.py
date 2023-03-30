@@ -144,7 +144,7 @@ def create_list():
     global admit
     admit = sorted(
         analysis.calculate_weight(score, select),
-        key=lambda d: float(d["錄取分數"]),
+        key=lambda d: d["滿分率"],
         reverse=True,
     )
 
@@ -174,7 +174,8 @@ def show():
     tk.Label(frame4, text="系組名").grid(row=0, column=2, sticky=tk.W)
     tk.Label(frame4, text="錄取人數").grid(row=0, column=3, sticky=tk.W)
     tk.Label(frame4, text="錄取分數").grid(row=0, column=4, sticky=tk.W)
-    tk.Label(frame4, text="加權分數").grid(row=0, column=5, sticky=tk.W)
+    tk.Label(frame4, text="錄取分數/滿分").grid(row=0, column=5, sticky=tk.W)
+    tk.Label(frame4, text="加權分數").grid(row=0, column=6, sticky=tk.W)
 
     for i in range(len(admit)):
         tk.Label(frame4, text=admit[i]["系組代碼"]).grid(row=(i + 1), column=0, sticky=tk.W)
@@ -182,7 +183,10 @@ def show():
         tk.Label(frame4, text=admit[i]["系組名"]).grid(row=(i + 1), column=2, sticky=tk.W)
         tk.Label(frame4, text=admit[i]["錄取人數"]).grid(row=(i + 1), column=3, sticky=tk.W)
         tk.Label(frame4, text=admit[i]["錄取分數"]).grid(row=(i + 1), column=4, sticky=tk.W)
-        tk.Label(frame4, text=admit[i]["加權分數"]).grid(row=(i + 1), column=5, sticky=tk.W)
+        tk.Label(frame4, text=f"{admit[i]['滿分率']:.2f}%").grid(
+            row=(i + 1), column=5, sticky=tk.W
+        )
+        tk.Label(frame4, text=admit[i]["加權分數"]).grid(row=(i + 1), column=6, sticky=tk.W)
 
     frame4.grid(row=5, column=0, sticky=tk.W)
 

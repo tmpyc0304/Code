@@ -72,6 +72,8 @@ def calculate_weight(score, select):
 
                 if int(i["錄取人數"]) != 0 and major is False:
                     i["加權分數"] = sum([a * b for a, b in zip(score, weight)])
+                    i["滿分率"] = float(i["錄取分數"]) / sum([60 * a for a in weight]) * 100
+
                     if i["加權分數"] > float(i["錄取分數"]):
                         admit.append(i)
                     elif i["加權分數"] == float(i["錄取分數"]):
